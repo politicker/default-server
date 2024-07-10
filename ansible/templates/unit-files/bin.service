@@ -1,0 +1,12 @@
+[Unit]
+Description={{ description }}
+After=network.target
+
+[Service]
+ExecStart=/opt/{{ service_name }} {{ args }}
+ExecStop=/bin/kill -s QUIT $MAINPID
+EnvironmentFile=/etc/{{ service_name }}.env
+Restart=always
+
+[Install]
+WantedBy=default.target

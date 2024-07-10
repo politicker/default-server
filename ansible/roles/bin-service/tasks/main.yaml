@@ -1,0 +1,58 @@
+---
+- name: Ensure env file exists
+  become: true
+  ansible.builtin.file:
+    path: /etc/{{ service_name }}.env
+    state: touch
+    mode: "0644"
+    modification_time: preserve
+    access_time: preserve
+  tags: [not-deploy]
+
+- name: Copy {{ service_name }} unit file
+  become: true
+  ansible.builtin.template:
+    src: "unit-files/bin.service"
+    dest: "/etc/systemd/system/{{ service_name }}.service"
+    mode: "0644"
+  notify: Reload systemd daemon
+  tags: [not-deploy]
+
+- name: "Env file"
+  become: true
+  ansible.builtin.copy:
+    src: "{{ env_file }}"
+    dest: /etc/{{ service_name }}.env
+    mode: "0644"
+
+- name: Get release json
+  ansible.builtin.uri:
+    url: "https://api.github.com/repos/kontango-org/{{ service_name }}/releases/latest"
+    return_content: true
+    headers:
+      Accept: "application/json"
+      Authorization: "token {{ github_token }}"
+  register: release_json
+
+- name: Set asset id
+  ansible.builtin.set_fact:
+    github_asset_id: "{{ release_json.json.assets[0].id }}"
+
+- name: Download binary zip from github
+  ansible.builtin.get_url:
+    url: "https://api.github.com/repos/kontango-org/{{ service_name }}/releases/assets/{{ github_asset_id }}"
+    dest: "/tmp/{{ service_name }}.zip"
+    mode: "0644"
+    headers:
+      Accept: "application/octet-stream"
+      Authorization: "token {{ github_token }}"
+
+- name: Unzip the binary
+  ansible.builtin.unarchive:
+    src: "/tmp/{{ service_name }}.zip"
+    remote_src: true
+    dest: "/opt"
+    mode: "0755"
+  become: true
+  notify: Restart {{ service_name }} service
+

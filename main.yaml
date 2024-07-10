@@ -1,0 +1,28 @@
+- name: Provision default server
+  hosts: all
+  handlers:
+    - name: Handlers
+      ansible.builtin.import_tasks: handlers/main.yaml
+  tasks:
+    # Disabling this because tag exclusion seems to still trigger
+    # ansible to check the installed galaxy roles.
+    - name: Base
+      ansible.builtin.include_tasks:
+        file: tasks/base.yaml
+        apply:
+          tags: [base]
+      tags: [base]
+
+    - name: Caddy
+      ansible.builtin.include_tasks:
+        file: tasks/caddy.yaml
+        apply:
+          tags: [base, caddy]
+      tags: [base, caddy]
+
+    - name: Applications
+      ansible.builtin.include_tasks:
+        file: tasks/applications.yaml
+        apply:
+          tags: [base]
+      tags: [base, provision, deploy]

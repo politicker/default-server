@@ -1,0 +1,19 @@
+[Unit]
+Description={{ service_name }}
+After=docker.service
+Requires=docker.service
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker exec %n stop
+ExecStartPre=-/usr/bin/docker rm %n
+ExecStart=/usr/bin/docker run --rm --name %n \
+	--network="host" \
+	--stop-timeout 60 \
+	--env-file /etc/{{ service_name }}.env \
+	734485531948.dkr.ecr.us-east-1.amazonaws.com/{{ service_name }}:{{ tag_name }}
+ExecStop=/usr/bin/docker exec %n stop
+
+[Install]
+WantedBy=default.target

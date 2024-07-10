@@ -1,0 +1,20 @@
+- name: Apt update
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+
+- name: Install packages
+  ansible.builtin.apt:
+    name:
+      - git
+      - gnupg2
+      - build-essential
+      - ca-certificates
+      - curl
+      - neovim
+      - postgresql-client
+  become: true
+
+- name: Docker
+  ansible.builtin.import_tasks: tasks/docker.yaml
+  become: true

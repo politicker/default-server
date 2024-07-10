@@ -1,0 +1,74 @@
+- name: Install required packages
+  become: true
+  ansible.builtin.apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - debian-keyring
+    - debian-archive-keyring
+    - apt-transport-https
+    - curl
+  tags: [not-deploy]
+
+- name: Download Caddy GPG key
+  become: true
+  ansible.builtin.get_url:
+    url: https://dl.cloudsmith.io/public/caddy/stable/gpg.key
+    dest: /tmp/caddy-gpg.key
+    mode: "0644"
+  tags: [not-deploy]
+
+- name: Import Caddy GPG key
+  become: true
+  ansible.builtin.apt_key:
+    keyring: /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+    file: /tmp/caddy-gpg.key
+    state: present
+  tags: [not-deploy]
+
+- name: Add Caddy repository entry
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/caddy-stable-archive-keyring.gpg] https://dl.cloudsmith.io/public/caddy/stable/deb/debian any-version main"
+    state: present
+  tags: [not-deploy]
+
+- name: Update APT package cache
+  become: true
+  ansible.builtin.apt:
+    update_cache: true
+  tags: [not-deploy]
+
+- name: Install Caddy
+  become: true
+  ansible.builtin.apt:
+    name: caddy
+    state: present
+  tags: [not-deploy]
+
+- name: Config overrides
+  become: true
+  ansible.builtin.copy:
+    src: caddy-overrides.conf
+    dest: /etc/systemd/system/caddy.service.d/override.conf
+    mode: "0644"
+  notify: Reload systemd daemon
+  tags: [deploy]
+
+- name: Env
+  become: true
+  ansible.builtin.copy:
+    src: env/{{ stage }}/caddy.env
+    dest: /etc/caddy.env
+    mode: "0644"
+  notify: Restart caddy
+  tags: [deploy]
+
+- name: Caddy config
+  become: true
+  ansible.builtin.copy:
+    src: kontango-app.Caddyfile
+    dest: /etc/caddy/Caddyfile
+    mode: "0644"
+  notify: Restart caddy
+  tags: [deploy]

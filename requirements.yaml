@@ -1,0 +1,6 @@
+roles:
+  - name: alvistack.podman
+  - name: amazon_ssm_agent
+    src: https://github.com/cisagov/ansible-role-amazon-ssm-agent
+collections:
+  - name: datadog.dd
