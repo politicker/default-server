@@ -55,15 +55,6 @@
   notify: Reload systemd daemon
   tags: [deploy]
 
-- name: Env
-  become: true
-  ansible.builtin.copy:
-    src: env/{{ stage }}/caddy.env
-    dest: /etc/caddy.env
-    mode: "0644"
-  notify: Restart caddy
-  tags: [deploy]
-
 - name: Caddy config
   become: true
   ansible.builtin.copy:

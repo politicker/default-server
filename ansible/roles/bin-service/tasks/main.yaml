@@ -24,8 +24,4 @@
     src: "{{ env_file }}"
     dest: /etc/{{ service_name }}.env
     mode: "0644"
-
-- name: Compile Go binary
-  command: go build -o /path/to/output/binary /path/to/source/main.go
-  args:
-    chdir: /path/to/source/
+# Copy gobins to the server

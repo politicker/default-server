@@ -14,6 +14,5 @@
       tags: [betterbike]
   vars:
     service_name: "betterbike"
-    env_file: "env/{{ stage }}/betterbike.env"
-    tag_name: "{{ stage }}"
+    env_file: "env/betterbike.env"
   tags: [betterbike]
