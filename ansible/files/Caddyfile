@@ -1,0 +1,12 @@
+(trailingSlash) {
+	@trailingSlash {
+		path_regexp trailingSlash /(.+)/$
+	}
+
+	redir @trailingSlash /{re.trailingSlash.1}
+}
+
+http://web.betterbike.app {
+	reverse_proxy localhost:3000
+	import trailingSlash
+}

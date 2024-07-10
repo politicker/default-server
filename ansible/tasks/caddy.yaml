@@ -67,7 +67,7 @@
 - name: Caddy config
   become: true
   ansible.builtin.copy:
-    src: kontango-app.Caddyfile
+    src: Caddyfile
     dest: /etc/caddy/Caddyfile
     mode: "0644"
   notify: Restart caddy

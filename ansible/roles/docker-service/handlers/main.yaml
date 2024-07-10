@@ -1,7 +1,0 @@
----
-- name: Restart {{ service_name }} service
-  ansible.builtin.systemd:
-    name: "{{ service_name }}.service"
-    state: restarted
-    enabled: true
-  become: true

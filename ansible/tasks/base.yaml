@@ -14,7 +14,3 @@
       - neovim
       - postgresql-client
   become: true
-
-- name: Docker
-  ansible.builtin.import_tasks: tasks/docker.yaml
-  become: true

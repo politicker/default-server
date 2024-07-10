@@ -1,9 +1,0 @@
-:80 {
-	@trailingSlash {
-		path_regexp trailingSlash /(.+)/$
-	}
-
-	redir @trailingSlash /{re.trailingSlash.1}
-
-	reverse_proxy /* {env.BETTERBIKE_HOST}
-}

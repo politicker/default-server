@@ -25,34 +25,7 @@
     dest: /etc/{{ service_name }}.env
     mode: "0644"
 
-- name: Get release json
-  ansible.builtin.uri:
-    url: "https://api.github.com/repos/kontango-org/{{ service_name }}/releases/latest"
-    return_content: true
-    headers:
-      Accept: "application/json"
-      Authorization: "token {{ github_token }}"
-  register: release_json
-
-- name: Set asset id
-  ansible.builtin.set_fact:
-    github_asset_id: "{{ release_json.json.assets[0].id }}"
-
-- name: Download binary zip from github
-  ansible.builtin.get_url:
-    url: "https://api.github.com/repos/kontango-org/{{ service_name }}/releases/assets/{{ github_asset_id }}"
-    dest: "/tmp/{{ service_name }}.zip"
-    mode: "0644"
-    headers:
-      Accept: "application/octet-stream"
-      Authorization: "token {{ github_token }}"
-
-- name: Unzip the binary
-  ansible.builtin.unarchive:
-    src: "/tmp/{{ service_name }}.zip"
-    remote_src: true
-    dest: "/opt"
-    mode: "0755"
-  become: true
-  notify: Restart {{ service_name }} service
-
+- name: Compile Go binary
+  command: go build -o /path/to/output/binary /path/to/source/main.go
+  args:
+    chdir: /path/to/source/
