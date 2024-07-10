@@ -19,7 +19,7 @@ provision app:
 # TODO: Consider moving betterbike main.go into cmd/main.go
 compile app:
 		cd $POLITICKER_DIR/{{ app }} && \
-		GOOS=linux GOARCH=amd64 go build -o $POLITICKER_DIR/default-server/bin/{{ app }} .
+		GOOS=linux GOARCH=amd64 go build -o $POLITICKER_DIR/default-server/ansible/files/bin/{{ app }} .
 
 deploy app:
 	just compile {{ app }} && \

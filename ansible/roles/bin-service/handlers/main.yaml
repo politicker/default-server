@@ -1,5 +1,5 @@
 ---
-- name: Restart {{ service_name }} service
+- name: Restart {{ service_name }}
   ansible.builtin.systemd:
     name: "{{ service_name }}.service"
     state: restarted

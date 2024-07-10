@@ -9,7 +9,7 @@
     access_time: preserve
   tags: [not-deploy]
 
-- name: Copy {{ service_name }} unit file
+- name: "Copy unit file: {{ service_name }}"
   become: true
   ansible.builtin.template:
     src: "unit-files/bin.service"
@@ -24,4 +24,12 @@
     src: "{{ env_file }}"
     dest: /etc/{{ service_name }}.env
     mode: "0644"
-# Copy gobins to the server
+  notify: Restart {{ service_name }}
+
+- name: "Copy gobin"
+  become: true
+  ansible.builtin.copy:
+    src: "bin/{{ service_name }}"
+    dest: /opt/{{ service_name }}
+    mode: "0755"
+  notify: Restart {{ service_name }}

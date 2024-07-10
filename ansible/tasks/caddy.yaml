@@ -46,15 +46,6 @@
     state: present
   tags: [not-deploy]
 
-- name: Config overrides
-  become: true
-  ansible.builtin.copy:
-    src: caddy-overrides.conf
-    dest: /etc/systemd/system/caddy.service.d/override.conf
-    mode: "0644"
-  notify: Reload systemd daemon
-  tags: [deploy]
-
 - name: Caddy config
   become: true
   ansible.builtin.copy:

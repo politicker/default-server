@@ -1,12 +1,3 @@
-# - name: Docker login
-#   become: true
-#   ansible.builtin.shell:
-#     cmd: "set -o pipefail && aws ecr get-login-password --region us-east-1 |
-#       docker login --username AWS --password-stdin
-#       734485531948.dkr.ecr.us-east-1.amazonaws.com"
-#     executable: /bin/bash
-#   tags: [trader-portal, admin-portal]
-
 - name: Betterbike Service
   ansible.builtin.include_role:
     name: bin-service
@@ -15,4 +6,6 @@
   vars:
     service_name: "betterbike"
     env_file: "env/betterbike.env"
+    description: "Betterbike Web Service"
+    args:
   tags: [betterbike]
