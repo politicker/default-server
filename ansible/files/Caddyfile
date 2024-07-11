@@ -14,5 +14,4 @@ http://web.betterbike.app {
 http://lifts.hborg.org {
 	reverse_proxy localhost:3001
 	import trailingSlash
-	# Doing a do thing
 }
