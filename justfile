@@ -44,3 +44,11 @@ edit file:
 
 galaxy:
 	ansible-galaxy install -r ansible/requirements.yaml --force
+
+# Random stuff not related to ansible or provisioning
+upload-lifts app:
+	curl -i -X POST \
+		-H "Content-Type: text/csv" \
+		-H "X-Upload-Secret: $LIFTS_UPLOAD_SECRET" \
+		--data-binary @ansible/files/{{ app }}/strong.csv \
+		https://{{ app }}/upload-lifts

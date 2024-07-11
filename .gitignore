@@ -1,2 +1,3 @@
 passwords
 ansible/files/bin/*
+ansible/files/lifts.hborg.org/*
