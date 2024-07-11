@@ -10,3 +10,9 @@ http://web.betterbike.app {
 	reverse_proxy localhost:3000
 	import trailingSlash
 }
+
+http://lifts.hborg.org {
+	reverse_proxy localhost:3001
+	import trailingSlash
+	# Doing a do thing
+}

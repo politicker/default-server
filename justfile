@@ -16,9 +16,8 @@ provision app:
 		--skip-tags not-provision \
 		--tags provision
 
-# TODO: Consider moving betterbike main.go into cmd/main.go
 compile app:
-		cd $POLITICKER_DIR/{{ app }} && \
+		cd $POLITICKER_DIR/{{ app }}/cmd && \
 		GOOS=linux GOARCH=amd64 go build -o $POLITICKER_DIR/default-server/ansible/files/bin/{{ app }} .
 
 deploy app:
@@ -26,6 +25,12 @@ deploy app:
 	`just ansible-preamble {{ app }}` \
 		--skip-tags not-deploy \
 		--tags deploy
+
+caddy:
+	`just ansible-preamble caddy` \
+		--skip-tags not-deploy \
+		--tags deploy
+
 
 encrypt +files:
 	ansible-vault encrypt \

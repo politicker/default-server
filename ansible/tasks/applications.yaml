@@ -9,3 +9,15 @@
     description: "Betterbike Web Service"
     args:
   tags: [betterbike]
+
+- name: lifts.hborg.org Service
+  ansible.builtin.include_role:
+    name: bin-service
+    apply:
+      tags: [lifts.hborg.org]
+  vars:
+    service_name: "lifts.hborg.org"
+    env_file: "env/lifts.hborg.org.env"
+    description: "lifts.hborg.org Web Service"
+    args: web
+  tags: [lifts.hborg.org]
